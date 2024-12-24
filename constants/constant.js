@@ -12,5 +12,8 @@ module.exports = {
   auth: {},
   google: {},
   port: process.env.PORT || 4000,
+  redis: {
+    uri: process.env.REDIS_URI,
+  },
   logging: process.env.NODE_ENV === "production",
 };

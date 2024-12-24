@@ -6,7 +6,7 @@ const Tag = (sequelize) =>
     {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
-        primarykey: true,
+        primaryKey: true,
         allowNull: false,
         autoIncrement: true,
       },

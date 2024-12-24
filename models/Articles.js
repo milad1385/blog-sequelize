@@ -7,7 +7,7 @@ const Article = (sequelize) =>
     {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
-        primarykey: true,
+        primaryKey: true,
         allowNull: false,
         autoIncrement: true,
       },

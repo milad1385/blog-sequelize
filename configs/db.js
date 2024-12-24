@@ -1,16 +1,7 @@
 const { Sequelize } = require("sequelize");
 const constant = require("../constants/constant");
-//* JsDoc
-/** @type {import('sequelize').ModelCtor<import('sequelize').Model<any, any>} */
-const User = require("./models/User")(db);
-/** @type {import('sequelize').ModelCtor<import('sequelize').Model<any, any>} */
-const Tag = require("./models/Tag")(db);
-/** @type {import('sequelize').ModelCtor<import('sequelize').Model<any, any>} */
-const TagArticle = require("./models/TagsArticles")(db);
-/** @type {import('sequelize').ModelCtor<import('sequelize').Model<any, any>} */
-const Article = require("./models/Articles")(db);
 
-const sequelize = new Sequelize({
+const db = new Sequelize({
   host: constant.db.host,
   username: constant.db.username,
   password: constant.db.password,
@@ -18,6 +9,16 @@ const sequelize = new Sequelize({
   database: constant.db.name,
   logging: constant.logging ? false : console.log,
 });
+
+//* JsDoc
+/** @type {import('sequelize').ModelCtor<import('sequelize').Model<any, any>} */
+const User = require("../models/User")(db);
+/** @type {import('sequelize').ModelCtor<import('sequelize').Model<any, any>} */
+const Tag = require("../models/Tags")(db);
+/** @type {import('sequelize').ModelCtor<import('sequelize').Model<any, any>} */
+const TagArticle = require("../models/TagsArticles")(db);
+/** @type {import('sequelize').ModelCtor<import('sequelize').Model<any, any>} */
+const Article = require("../models/Articles")(db);
 
 User.hasMany(Article, {
   foreignKey: "author_id",
@@ -38,18 +39,4 @@ Tag.belongsToMany(Article, {
   foreignKey: "tag_id",
 });
 
-// sequelize.sync({ alter: true });
-
-// const connectToDB = async () => {
-//   try {
-//     await sequelize.authenticate();
-
-//     console.log("connect to db successfully :)");
-//   } catch (error) {
-//     console.error("error in conection => ", error.message);
-//   }
-// };
-
-// connectToDB();
-
-module.exports = sequelize;
+module.exports = { db, User, Tag, TagArticle, Article };
