@@ -6,7 +6,8 @@ const { errorHandler } = require("./middlewares/errorHandler");
 const { setHeaders } = require("./middlewares/headers");
 const authRoutes = require("./routes/auth.route");
 const passport = require("passport");
-const strategy = require("./middlewares/strategy");
+
+const localStrategy = require("./strategies/localStrategy");
 
 const app = express();
 
@@ -20,7 +21,7 @@ app.use(cookie());
 //* Cors Policy
 app.use(setHeaders);
 
-passport.use(strategy);
+passport.use(localStrategy);
 
 //* Static Folders
 app.use(express.static(path.join(__dirname, "public")));
