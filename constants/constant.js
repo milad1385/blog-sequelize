@@ -9,7 +9,12 @@ module.exports = {
     dialect: process.env.DB_DIALECT,
     port: process.env.DB_PORT || 3306,
   },
-  auth: {},
+  auth: {
+    accessTokenKey: process.env.ACCESS_TOKEN_SECRET_KEY,
+    refreshTokenKey: process.env.REFRESH_TOKEN_SECRET_KEY,
+    accessTokenExpire: process.env.ACCESS_TOKEN_EXPIRE_IN_SECONDS,
+    refreshTokenExpire: process.env.REFRESH_TOKEN_EXPIRE_IN_SECONDS,
+  },
   google: {},
   port: process.env.PORT || 4000,
   redis: {

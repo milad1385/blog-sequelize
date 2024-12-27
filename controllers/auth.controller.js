@@ -1,5 +1,50 @@
+const { User } = require("../configs/db");
+const redis = require("../configs/redis");
+const constant = require("../constants/constant");
+const { registerSchema } = require("../validators/auth.validators");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 exports.register = async (req, res, next) => {
   try {
+    const { name, username, email, password } = req.body;
+    await registerSchema.validate(req.body, { abortEarly: false });
+
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      name,
+      username,
+      email,
+      password: hashedPassword,
+    });
+
+    const accessToken = jwt.sign(
+      { id: user.id, role: user.role },
+      constant.auth.accessTokenKey,
+      { expiresIn: constant.auth.accessTokenExpire + "s" }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: user.id },
+      constant.auth.refreshTokenKey,
+      { expiresIn: constant.auth.refreshTokenExpire + "s" }
+    );
+
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
+
+    await redis.set(
+      `refreshToken:${user.id}`,
+      hashedRefreshToken,
+      "EX",
+      constant.auth.refreshTokenExpire
+    );
+
+    return res.status(201).json({
+      accessToken,
+      refreshToken,
+    });
   } catch (error) {
     next(error);
   }
