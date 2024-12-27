@@ -57,9 +57,31 @@ exports.login = async (req, res, next) => {
   try {
     const user = req.user;
 
-  
-    console.log(user);
-    
+    const accessToken = jwt.sign(
+      { id: user.id, role: user.role },
+      constant.auth.accessTokenKey,
+      { expiresIn: constant.auth.accessTokenExpire + "s" }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: user.id },
+      constant.auth.refreshTokenKey,
+      { expiresIn: constant.auth.refreshTokenExpire + "s" }
+    );
+
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
+
+    await redis.set(
+      `refreshToken:${user.id}`,
+      hashedRefreshToken,
+      "EX",
+      constant.auth.refreshTokenExpire
+    );
+
+    return res.status(201).json({
+      accessToken,
+      refreshToken,
+    });
   } catch (error) {
     next(error);
   }
