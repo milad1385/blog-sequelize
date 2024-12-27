@@ -13,11 +13,14 @@ exports.register = async (req, res, next) => {
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    const usersCount = await User.count({});
+
     const user = await User.create({
       name,
       username,
       email,
       password: hashedPassword,
+      role: usersCount > 0 ? "user" : "admin",
     });
 
     const accessToken = jwt.sign(

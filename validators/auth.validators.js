@@ -11,7 +11,7 @@ const registerSchema = yup.object().shape({
     .min(2, "حداقل کاراکتر نام کاربری 2 عدد است")
     .max(255, "حداکثر کاراکتر نام کاربری 255 عدد است")
     .required("وارد کردن نام کاربری الزامیست"),
-  email: yup.email().required("وارد کردن ایمیل الزامی است"),
+  email: yup.string().email("فرمت ایمیل صحیح نیست").required("وارد کردن ایمیل الزامی است"),
   password: yup
     .string()
     .required("وارد کردن پسورد الزامی است")
@@ -36,7 +36,7 @@ const loginSchema = yup.object().shape({
     .required("وارد کردن پسورد الزامی است")
     .min(8, "حداقل 8 کاراکتر وارد کنید")
     .max(24, "حداکثر 24 کاراکتر وارد کنید"),
-  uuid: yup.uuid().required("ارسال uuid اجباریست"),
+  uuid: yup.string().uuid().required("ارسال uuid اجباریست"),
   captcha: yup.string().required("وارد کردن کد کپچا اجباریست"),
 });
 

@@ -4,6 +4,7 @@ const cookie = require("cookie-parser");
 const path = require("path");
 const { errorHandler } = require("./middlewares/errorHandler");
 const { setHeaders } = require("./middlewares/headers");
+const authRoutes = require("./routes/auth.route");
 
 const app = express();
 
@@ -19,6 +20,8 @@ app.use(setHeaders);
 
 //* Static Folders
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use("/auth", authRoutes);
 
 app.use((req, res) => {
   console.log("this path is not found:", req.path);

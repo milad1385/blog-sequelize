@@ -36,13 +36,13 @@ const User = (sequelize) =>
         type: DataTypes.ENUM,
         values: ["user", "admin"],
         allowNull: false,
-        default: "user",
+        defaultValue: "user",
       },
       provider: {
         type: DataTypes.ENUM,
         values: ["local", "google"],
         allowNull: false,
-        default: "local",
+        defaultValue: "local",
       },
     },
     {
