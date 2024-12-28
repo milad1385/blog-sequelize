@@ -4,6 +4,8 @@ const constant = require("../constants/constant");
 const { registerSchema } = require("../validators/auth.validators");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const svgCaptcha = require("svg-captcha");
+const UUID = require("uuid").v4;
 
 exports.register = async (req, res, next) => {
   try {
@@ -69,6 +71,7 @@ exports.login = async (req, res, next) => {
       { expiresIn: constant.auth.refreshTokenExpire + "s" }
     );
 
+    const salt = await bcrypt.genSalt(12);
     const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
 
     await redis.set(
@@ -89,6 +92,31 @@ exports.login = async (req, res, next) => {
 
 exports.getMe = async (req, res, next) => {
   try {
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getCaptcha = async (req, res, next) => {
+  try {
+    const { data, text } = svgCaptcha.create({
+      noise: 5,
+      size: 5,
+    });
+
+    const uuid = UUID();
+
+    await redis.set(`captcha:${uuid}`, text.toLowerCase(), "EX", 60 * 3);
+
+    return res.json({ data, uuid });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.showLoginView = async (req, res, next) => {
+  try {
+    return res.render("index");
   } catch (error) {
     next(error);
   }

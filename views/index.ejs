@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      * {
+        font-family: sans-serif;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 35px;
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        overflow: hidden;
+        background-color: #eeeeee;
+      }
+
+      .login-form {
+        width: 400px;
+        height: 500px;
+        background-color: #959292;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+        padding: 15px 30px;
+      }
+
+      input {
+        width: 96.5%;
+        margin-top: 25px;
+        outline: none;
+        padding: 10px 5px;
+      }
+
+      button {
+        width: 100%;
+        height: 100%;
+        padding: 10px 0;
+        cursor: pointer;
+        background-color: black;
+        color: white;
+        font-size: 18px;
+        border: none;
+        margin-top: 35px;
+      }
+
+      .captcha-container {
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        margin: 0 auto;
+        padding: 10px 0;
+        margin-top: 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-form">
+      <h1>Login Form</h1>
+      <form action="/auth/login" method="post">
+        <div>
+          <input
+            type="text"
+            name="username"
+            placeholder="Please enter your username ..."
+          />
+        </div>
+        <div>
+          <input
+            type="password"
+            name="password"
+            placeholder="Please enter your password ..."
+          />
+        </div>
+
+        <div>
+          <input
+            type="text"
+            name="captchaCode"
+            placeholder="Please enter your captcha ..."
+          />
+        </div>
+        <div class="captcha-container"></div>
+        <input type="hidden" name="uuid" class="uuid-input" />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <script>
+      const captchaContainer = document.querySelector(".captcha-container");
+      const uuidInput = document.querySelector(".uuid-input");
+      (async () => {
+        const res = await fetch(`/auth/captcha`);
+
+        const { data, uuid } = await res.json();
+
+        captchaContainer.innerHTML = data;
+        uuidInput.value = uuid;
+      })();
+    </script>
+  </body>
+</html>
