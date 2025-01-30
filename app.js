@@ -4,8 +4,8 @@ const cookie = require("cookie-parser");
 const path = require("path");
 const { errorHandler } = require("./middlewares/errorHandler");
 const { setHeaders } = require("./middlewares/headers");
-const authRoutes = require("./routes/auth.route");
-const articleRoutes = require("./routes/article.route");
+const authRoutes = require("./routes/auth.routes");
+const articleRoutes = require("./routes/article.routes");
 const passport = require("passport");
 
 const localStrategy = require("./strategies/localStrategy");
