@@ -6,11 +6,10 @@ const ExtractJwt = require("passport-jwt").ExtractJwt;
 
 module.exports = new JwtStrategy(
   {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken,
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: constant.auth.accessTokenKey,
   },
   async (payload, done) => {
-    console.log("payload => ", payload);
     const user = await User.findByPk(payload.id, {
       raw: true,
       attributes: {

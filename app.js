@@ -5,6 +5,7 @@ const path = require("path");
 const { errorHandler } = require("./middlewares/errorHandler");
 const { setHeaders } = require("./middlewares/headers");
 const authRoutes = require("./routes/auth.route");
+const articleRoutes = require("./routes/article.route");
 const passport = require("passport");
 
 const localStrategy = require("./strategies/localStrategy");
@@ -27,12 +28,13 @@ app.set("views", path.join(__dirname, "views"));
 app.use(setHeaders);
 
 passport.use(localStrategy);
-passport.use("accessTokenJwt", jwtAccessTokenStrategy);
+passport.use("accessToken", jwtAccessTokenStrategy);
 
 //* Static Folders
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/auth", authRoutes);
+app.use("/article", articleRoutes);
 
 app.get("/login", showLoginView);
 

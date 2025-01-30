@@ -10,7 +10,7 @@ router
   .route("/")
   .post(
     validate(articleSchema),
-    passport.authenticate("accessTokenJwt", { session: false }),
+    passport.authenticate("accessToken", { session: false }),
     controller.create
   );
 
