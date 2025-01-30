@@ -9,6 +9,7 @@ const passport = require("passport");
 
 const localStrategy = require("./strategies/localStrategy");
 const { showLoginView } = require("./controllers/auth.controller");
+const jwtAccessTokenStrategy = require("./strategies/jwtAccessTokenStrategy");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(setHeaders);
 
 passport.use(localStrategy);
+passport.use("accessTokenJwt", jwtAccessTokenStrategy);
 
 //* Static Folders
 app.use(express.static(path.join(__dirname, "public")));
