@@ -1,5 +1,5 @@
 const yup = require("yup");
-const createNewArticleSchema = yup.object().shape({
+const articleSchema = yup.object().shape({
   title: yup
     .string()
     .min(3, "حداقل 3 کاراکتر برای عنوان وارد کنید ")
@@ -26,4 +26,4 @@ const createNewArticleSchema = yup.object().shape({
     .required("وارد کردن تگ ها الزامی میباشد"),
 });
 
-module.exports = { createNewArticleSchema };
+module.exports = { articleSchema };
