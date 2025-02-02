@@ -12,7 +12,7 @@ exports.create = async (req, res, next) => {
     tags = Array.isArray(tags) ? tags : [tags];
 
     tags = tags.map((tag) =>
-      Tag.findOrCreate({ where: { title: tag.trim() } })
+      Tag.findOrCreate({ where: { title: tag.trim() }, raw: true })
     );
     tags = await Promise.all(tags);
 
@@ -30,7 +30,11 @@ exports.create = async (req, res, next) => {
           cover: coverPath,
         });
 
-        await article.addTag(tags.map((tag) => tag[0]));
+        const tagAdded = tags.map((tag) => tag[0]);
+
+        console.log(tagAdded);
+
+        await article.addTag(tagAdded);
 
         return res.status(201).json({
           ...article.dataValues,

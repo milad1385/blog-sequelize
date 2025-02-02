@@ -30,7 +30,7 @@ Article.belongsTo(User, { foreignKey: "author_id", as: "author" });
 Article.belongsToMany(Tag, {
   through: TagArticle,
   onDelete: "CASCADE",
-  foreignKey: "author_id",
+  foreignKey: "article_id",
 });
 
 Tag.belongsToMany(Article, {

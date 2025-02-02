@@ -12,6 +12,7 @@ module.exports = {
           model: "users",
           key: "id",
         },
+
         onDelete: "CASCADE",
       });
 
@@ -23,8 +24,10 @@ module.exports = {
             model: "articles",
             key: "id",
           },
+
           onDelete: "CASCADE",
         },
+
         tag_id: {
           type: Sequelize.INTEGER.UNSIGNED,
           allowNull: false,
@@ -32,6 +35,7 @@ module.exports = {
             model: "tags",
             key: "id",
           },
+
           onDelete: "CASCADE",
         },
       });
@@ -60,5 +64,7 @@ module.exports = {
       await transaction.rollback();
       throw err;
     }
+
+    await queryInterface.dropTable("relations");
   },
 };
