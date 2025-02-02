@@ -30,11 +30,7 @@ exports.create = async (req, res, next) => {
           cover: coverPath,
         });
 
-        const tagAdded = tags.map((tag) => tag[0]);
-
-        console.log(tagAdded);
-
-        await article.addTag(tagAdded);
+        await article.addTag(tags.map((tag) => tag[0]));
 
         return res.status(201).json({
           ...article.dataValues,
