@@ -93,3 +93,31 @@ exports.findBySlug = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.delete = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res
+        .status(422)
+        .json({ message: "Please send id in parameter :(" });
+    }
+
+    const article = await Article.findByPk(id, { raw: true });
+
+    if (!article) {
+      return res.status(404).json({ message: "Article not found :(" });
+    }
+
+    if (article.author_id !== req.user.id) {
+      return res.status(403).json({ message: "forbidden action !!!" });
+    }
+
+    await Article.destroy({ where: { id } });
+
+    return res.status(200).json({ message: "Article deleted successfully :)" });
+  } catch (error) {
+    next(error);
+  }
+};
