@@ -40,11 +40,11 @@ module.exports = {
         },
       });
 
-      await queryInterface.addConstraint("tags_articles", {
-        fields: ["article_id", "tag_id"],
-        type: "unique",
-        name: "unique_article_tag",
-      });
+      // await queryInterface.addConstraint("tags_articles", {
+      //   fields: ["article_id", "tag_id"],
+      //   type: "unique",
+      //   name: "unique_article_tag",
+      // });
 
       await transaction.commit();
     } catch (err) {

@@ -4,6 +4,8 @@ const { Tag, Article, User } = require("../configs/db");
 const deletePic = require("../utils/deletePic");
 
 exports.create = async (req, res, next) => {
+  console.log("req sended");
+
   try {
     let { title, content, tags } = req.body; // frontend -> ["frontend"]
     let slug = slugify(title, { lower: true });
@@ -31,7 +33,9 @@ exports.create = async (req, res, next) => {
           cover: coverPath,
         });
 
-        await article.addTag(tags.map((tag) => tag[0]));
+        const tagsToAdd = tags.map((tag) => tag[0]);
+
+        await article.addTag(tagsToAdd);
 
         return res.status(201).json({
           ...article.dataValues,
@@ -99,6 +103,9 @@ exports.delete = async (req, res, next) => {
   try {
     const { id } = req.params;
 
+    console.log(id);
+    
+
     if (!id) {
       return res
         .status(422)
@@ -115,7 +122,10 @@ exports.delete = async (req, res, next) => {
       return res.status(403).json({ message: "forbidden action !!!" });
     }
 
-    deletePic("article", article.cover);
+    console.log(article.cover);
+    
+
+    deletePic(article.cover , "article");
 
     await Article.destroy({ where: { id } });
 
