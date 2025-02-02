@@ -68,7 +68,7 @@ exports.findBySlug = async (req, res, next) => {
         {
           model: User,
           attributes: {
-            exclude: ["password" , "provider"],
+            exclude: ["password", "provider"],
           },
           as: "author",
         },
@@ -82,15 +82,13 @@ exports.findBySlug = async (req, res, next) => {
       ],
     });
 
-    console.log(article);
-
     if (!article) {
       return res.status(404).json({ message: "article not found :(" });
     }
 
     const tags = article.dataValues.tags.map((tag) => tag.title);
 
-    return res.json({...article.dataValues, tags });
+    return res.json({ ...article.dataValues, tags });
   } catch (error) {
     next(error);
   }
