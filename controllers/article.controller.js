@@ -1,6 +1,7 @@
 const { default: slugify } = require("slugify");
 
 const { Tag, Article, User } = require("../configs/db");
+const deletePic = require("../utils/deletePic");
 
 exports.create = async (req, res, next) => {
   try {
@@ -18,7 +19,7 @@ exports.create = async (req, res, next) => {
 
     let article;
     let i = 1;
-    const coverPath = `images/covers/${req.file?.filename}`;
+    const coverPath = `${req.file?.filename}`;
 
     while (!article) {
       try {
@@ -113,6 +114,8 @@ exports.delete = async (req, res, next) => {
     if (article.author_id !== req.user.id) {
       return res.status(403).json({ message: "forbidden action !!!" });
     }
+
+    deletePic("article", article.cover);
 
     await Article.destroy({ where: { id } });
 
