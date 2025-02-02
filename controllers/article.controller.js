@@ -60,12 +60,15 @@ exports.findBySlug = async (req, res, next) => {
     }
 
     const article = await Article.findOne({
-      where: { id },
+      where: { slug },
+      attributes: {
+        exclude: ["author_id"],
+      },
       include: [
         {
           model: User,
           attributes: {
-            exclude: ["password"],
+            exclude: ["password" , "provider"],
           },
           as: "author",
         },
@@ -79,13 +82,15 @@ exports.findBySlug = async (req, res, next) => {
       ],
     });
 
+    console.log(article);
+
     if (!article) {
       return res.status(404).json({ message: "article not found :(" });
     }
 
     const tags = article.dataValues.tags.map((tag) => tag.title);
 
-    return res.json({ ...article, tags });
+    return res.json({...article.dataValues, tags });
   } catch (error) {
     next(error);
   }
