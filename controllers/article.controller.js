@@ -1,6 +1,6 @@
 const { default: slugify } = require("slugify");
 
-const { Tag, Article } = require("../configs/db");
+const { Tag, Article, User } = require("../configs/db");
 
 exports.create = async (req, res, next) => {
   try {
@@ -46,5 +46,47 @@ exports.create = async (req, res, next) => {
     }
   } catch (err) {
     next(err);
+  }
+};
+
+exports.findBySlug = async (req, res, next) => {
+  try {
+    const { slug } = req.params;
+
+    if (!slug) {
+      return res
+        .status(422)
+        .json({ message: "Please send slug in parameters" });
+    }
+
+    const article = await Article.findOne({
+      where: { id },
+      include: [
+        {
+          model: User,
+          attributes: {
+            exclude: ["password"],
+          },
+          as: "author",
+        },
+        {
+          model: Tag,
+          attributes: ["title"],
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+    });
+
+    if (!article) {
+      return res.status(404).json({ message: "article not found :(" });
+    }
+
+    const tags = article.dataValues.tags.map((tag) => tag.title);
+
+    return res.json({ ...article, tags });
+  } catch (error) {
+    next(error);
   }
 };

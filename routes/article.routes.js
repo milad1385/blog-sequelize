@@ -12,10 +12,12 @@ const multer = multerStorage("public/images/article");
 router
   .route("/")
   .post(
-    // validate(articleSchema),
+    validate(articleSchema),
     passport.authenticate("accessToken", { session: false }),
     multer.single("cover"),
     controller.create
   );
+
+router.route("/:slug").get(controller.findBySlug);
 
 module.exports = router;
