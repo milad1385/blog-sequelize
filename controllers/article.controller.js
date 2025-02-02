@@ -1,13 +1,50 @@
 const { default: slugify } = require("slugify");
 
+const { Tag, Article } = require("../configs/db");
+
 exports.create = async (req, res, next) => {
   try {
-    const { title, content, tags } = req.body;
-
+    let { title, content, tags } = req.body; // frontend -> ["frontend"]
     let slug = slugify(title, { lower: true });
+    const copyOfSlug = slug;
+    const authorId = req.user.id;
 
-    console.log("[article created successfully :) ✌️]");
-  } catch (error) {
-    next(error);
+    tags = Array.isArray(tags) ? tags : [tags];
+
+    tags = tags.map((tag) =>
+      Tag.findOrCreate({ where: { title: tag.trim() } })
+    );
+    tags = await Promise.all(tags);
+
+    let article;
+    let i = 1;
+    const coverPath = `images/covers/${req.file?.filename}`;
+
+    while (!article) {
+      try {
+        article = await Article.create({
+          title,
+          content,
+          slug,
+          author_id: authorId,
+          cover: coverPath,
+        });
+
+        await article.addTag(tags.map((tag) => tag[0]));
+
+        return res.status(201).json({
+          ...article.dataValues,
+          tags: tags.map((tag) => tag[0].title),
+        });
+      } catch (err) {
+        if (err.original.code === "ER_DUP_ENTRY") {
+          slug = `${copyOfSlug}-${i++}`;
+        } else {
+          throw err;
+        }
+      }
+    }
+  } catch (err) {
+    next(err);
   }
 };
