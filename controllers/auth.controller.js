@@ -117,6 +117,18 @@ exports.getCaptcha = async (req, res, next) => {
   }
 };
 
+exports.logout = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+
+    await redis.del(`refreshToken:${id}`);
+
+    return res.status(200).json({ message: "You  log out successfully :)" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.showLoginView = async (req, res, next) => {
   try {
     return res.render("index");

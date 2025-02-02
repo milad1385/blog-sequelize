@@ -22,6 +22,12 @@ router
     controller.getMe
   );
 
+router.route(
+  "/logout",
+  passport.authenticate("accessToken", { session: false }),
+  controller.logout
+);
+
 router.route("/captcha").get(controller.getCaptcha);
 
 module.exports = router;
