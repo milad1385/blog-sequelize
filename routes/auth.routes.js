@@ -15,7 +15,12 @@ router
     passport.authenticate("local", { session: false }),
     controller.login
   );
-router.route("/me").get(controller.getMe);
+router
+  .route("/me")
+  .get(
+    passport.authenticate("accessToken", { session: false }),
+    controller.getMe
+  );
 
 router.route("/captcha").get(controller.getCaptcha);
 
