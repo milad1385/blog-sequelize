@@ -14,8 +14,12 @@ module.exports = {
     refreshTokenKey: process.env.REFRESH_TOKEN_SECRET_KEY,
     accessTokenExpire: process.env.ACCESS_TOKEN_EXPIRE_IN_SECONDS,
     refreshTokenExpire: process.env.REFRESH_TOKEN_EXPIRE_IN_SECONDS,
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    },
   },
-  google: {},
+  domain :process.env.APP_DOMAIN,
   port: process.env.PORT || 4000,
   redis: {
     uri: process.env.REDIS_URI,

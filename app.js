@@ -11,6 +11,7 @@ const passport = require("passport");
 const localStrategy = require("./strategies/localStrategy");
 const { showLoginView } = require("./controllers/auth.controller");
 const jwtAccessTokenStrategy = require("./strategies/jwtAccessTokenStrategy");
+const googleStrategy = require("./strategies/googleStrategy");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(setHeaders);
 
 passport.use(localStrategy);
 passport.use("accessToken", jwtAccessTokenStrategy);
+passport.use(googleStrategy);
 
 //* Static Folders
 app.use(express.static(path.join(__dirname, "public")));

@@ -28,6 +28,14 @@ router.route(
   controller.logout
 );
 
+router
+  .route("/google")
+  .get(passport.authenticate("google", { scope: ["profile", "email"] }));
+
+router
+  .route("/google/callback")
+  .get(passport.authenticate("google", { session: false }), controller.login);
+
 router.route("/captcha").get(controller.getCaptcha);
 
 module.exports = router;
