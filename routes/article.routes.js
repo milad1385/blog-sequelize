@@ -9,14 +9,12 @@ const router = express.Router();
 
 const multer = multerStorage("public/images/article");
 
-router
-  .route("/")
-  .post(
-    // validate(articleSchema),
-    passport.authenticate("accessToken", { session: false }),
-    multer.single("cover"),
-    controller.create
-  );
+router.route("/").post(
+  // validate(articleSchema),
+  passport.authenticate("accessToken", { session: false }),
+  multer.single("cover"),
+  controller.create
+);
 
 router.route("/:slug").get(controller.findBySlug);
 
@@ -25,6 +23,10 @@ router
   .delete(
     passport.authenticate("accessToken", { session: false }),
     controller.delete
+  )
+  .put(
+    passport.authenticate("accessToken", { session: false }),
+    controller.update
   );
 
 module.exports = router;

@@ -103,9 +103,6 @@ exports.delete = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    console.log(id);
-    
-
     if (!id) {
       return res
         .status(422)
@@ -122,10 +119,7 @@ exports.delete = async (req, res, next) => {
       return res.status(403).json({ message: "forbidden action !!!" });
     }
 
-    console.log(article.cover);
-    
-
-    deletePic(article.cover , "article");
+    deletePic(article.cover, "article");
 
     await Article.destroy({ where: { id } });
 
