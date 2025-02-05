@@ -117,6 +117,22 @@ exports.getCaptcha = async (req, res, next) => {
   }
 };
 
+exports.refreshToken = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    const newAccessToken = jwt.sign(
+      { id: user.id, role: user.role },
+      constant.auth.accessTokenKey,
+      { expiresIn: constant.auth.accessTokenExpire + "s" }
+    );
+
+    return res.json({ newAccessToken });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.logout = async (req, res, next) => {
   try {
     const { id } = req.user;

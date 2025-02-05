@@ -22,6 +22,13 @@ router
     controller.getMe
   );
 
+router
+  .route("/refreshToken")
+  .post(
+    passport.authenticate("refreshToken", { session: false }),
+    controller.refreshToken
+  );
+
 router.route(
   "/logout",
   passport.authenticate("accessToken", { session: false }),
