@@ -35,7 +35,7 @@ exports.create = async (req, res, next) => {
 
         const tagsToAdd = tags.map((tag) => tag[0]);
 
-        await article.addTag(tagsToAdd);
+        await article.addTags(tagsToAdd);
 
         return res.status(201).json({
           ...article.dataValues,
